@@ -49,8 +49,8 @@ while Power <= 4600
     h4i = h3 - dh34i;
     iWout = dh34i;
     aWout = dh34i*etaTurb;
-    dh34a = aWin;
-    h4a = h3 - (etaTurb*dh34i);
+    dh34a = aWout;
+    h4a = h3 - (dh34a);
     % solve for actual T4 using the actual change in h
     dhFCN2a = @(T) (R*((alpha*(T3-T))+(beta/2*(T3^2-T^2))+(gamma/3*(T3^3-T^3))+(rho/4*(T3^4-T^4))+(epsilon/5*(T3^5-T^5)))) - dh34a;
     T4a = fzero(dhFCN2a,500);
@@ -63,5 +63,21 @@ while Power <= 4600
     disp(Power)
     T3 = T3 + .00025;
 end
+%% Solve for state 5 and 6
+
+h6s = h2a;
+qRegens = h4a - h6s;
+h6a = h4a - (etaReg*(qRegens));
+dh61a = h6a - h1;
+qRegenA = h4a - h6a;
+qInOld = h3 - h2a;
+qInNew = qInOld - qRegenA;
+qOut = dh61a;
+tE = ((aWout - aWin)/qInNew) * 100;
+QIn = qInNew * m;   %kJ/s
+QIn_hr = QIn * 3600;    %kJ/hr
+
+
+
 
 
